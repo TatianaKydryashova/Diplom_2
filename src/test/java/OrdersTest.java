@@ -6,23 +6,27 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import requests.CreateLoginRequest;
 import requests.CreateOrderRequest;
 import requests.CreateUserRequest;
 
 import java.util.ArrayList;
 
 public class OrdersTest {
-    public UserApi userApi;
-    public String token;
-    public IngredientsApi ingredientsApi;
-    public OrderApi orderApi;
+     UserApi userApi;
+     String token;
+     IngredientsApi ingredientsApi;
+     OrderApi orderApi;
+    CreateUserRequest createUserRequest;
 
     @Before
     public void setUp() {
         userApi = new UserApi();
         ingredientsApi = new IngredientsApi();
         orderApi = new OrderApi();
+        createUserRequest = CreateUserRequest.generateRandomUser();
+        Response newUser = userApi.createUser(createUserRequest);
+        token = userApi.getAccessToken(newUser);
+        userApi.checkStatusCodeCreateUserOk(newUser);
     }
 
     @After
@@ -33,10 +37,6 @@ public class OrdersTest {
     @Test
     @DisplayName("Check make order with authorisation and correct ingredients")
     public void checkMakeOrderWithAuthorisationAndCorrectIngredientsTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
-        Response newUser = userApi.createUser(createUserRequest);
-        token = userApi.getAccessToken(newUser);
-        userApi.checkStatusCodeCreateUserOk(newUser);
         ArrayList<String> ingredientsList = ingredientsApi.getAllIngredientsList();
         ArrayList<String> ingredientsOrderList =  ingredientsApi.getIngredientsOrderList(ingredientsList);
         CreateOrderRequest createOrderRequest = CreateOrderRequest.generateOrderData(ingredientsOrderList);
@@ -61,10 +61,6 @@ public class OrdersTest {
     @Test
     @DisplayName("Check make order with authorisation and without ingredients")
     public void checkMakeOrderWithAuthorisationAndWithoutIngredientsTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
-        Response newUser = userApi.createUser(createUserRequest);
-        token = userApi.getAccessToken(newUser);
-        userApi.checkStatusCodeCreateUserOk(newUser);
         CreateOrderRequest createOrderRequest = CreateOrderRequest.generateOrderData();
         Response response = orderApi.makeOrderWithAuthorization(createOrderRequest, token);
         orderApi.checkStatusCodeCreateOrderWithAuthorizationAndWithoutIngredients(response);
@@ -75,10 +71,6 @@ public class OrdersTest {
     @Test
     @DisplayName("Check make order with authorisation and incorrect ingredients")
     public void checkMakeOrderWithAuthorisationAndIncorrectIngredientsTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
-        Response newUser = userApi.createUser(createUserRequest);
-        token = userApi.getAccessToken(newUser);
-        userApi.checkStatusCodeCreateUserOk(newUser);
         ArrayList<String> ingredientsOrderList = ingredientsApi.getIngredientsOrderListIncorrect();
         CreateOrderRequest createOrderRequest = CreateOrderRequest.generateOrderData(ingredientsOrderList);
         Response response = orderApi.makeOrderWithAuthorization(createOrderRequest, token);
@@ -88,10 +80,6 @@ public class OrdersTest {
     @Test
     @DisplayName("Check get order list authorised user")
     public void checkGetOrdersListAuthorisedUserTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
-        Response newUser = userApi.createUser(createUserRequest);
-        token = userApi.getAccessToken(newUser);
-        userApi.checkStatusCodeCreateUserOk(newUser);
         ArrayList<String> ingredientsList = ingredientsApi.getAllIngredientsList();
         ArrayList<String> ingredientsOrderList =  ingredientsApi.getIngredientsOrderList(ingredientsList);
         CreateOrderRequest createOrderRequest = CreateOrderRequest.generateOrderData(ingredientsOrderList);
@@ -107,10 +95,6 @@ public class OrdersTest {
     @Test
     @DisplayName("Check get order list not authorised user")
     public void checkGetOrdersListNotAuthorisedUserTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
-        Response newUser = userApi.createUser(createUserRequest);
-        token = userApi.getAccessToken(newUser);
-        userApi.checkStatusCodeCreateUserOk(newUser);
         ArrayList<String> ingredientsList = ingredientsApi.getAllIngredientsList();
         ArrayList<String> ingredientsOrderList =  ingredientsApi.getIngredientsOrderList(ingredientsList);
         CreateOrderRequest createOrderRequest = CreateOrderRequest.generateOrderData(ingredientsOrderList);

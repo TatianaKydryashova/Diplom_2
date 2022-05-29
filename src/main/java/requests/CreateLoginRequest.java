@@ -3,10 +3,10 @@ package requests;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class CreateLoginRequest {
-    public String email;
-    public String password;
-    public String name;
-    public static final String EMAIL_POSTFIX = "@yandex.ru";
+
+    private String email;
+    private String password;
+    private String name;
 
     public CreateLoginRequest(String email, String password) {
         this.email = email;
@@ -19,23 +19,35 @@ public class CreateLoginRequest {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getName() {
+        return name;
+    }
+
     public static CreateLoginRequest userCredentials (CreateUserRequest createUserRequest) {
-        return new CreateLoginRequest(createUserRequest.email, createUserRequest.password);
+        return new CreateLoginRequest(createUserRequest.getEmail(), createUserRequest.getPassword());
     }
 
     public static CreateLoginRequest userCredentialsIncorrectEmail(CreateUserRequest createUserRequest) {
-        return new CreateLoginRequest(RandomStringUtils.randomAlphabetic(10) + EMAIL_POSTFIX, createUserRequest.password);
+        return new CreateLoginRequest(RandomStringUtils.randomAlphabetic(10) + "@yandex.ru", createUserRequest.getPassword());
     }
 
     public static CreateLoginRequest userCredentialsIncorrectPassword(CreateUserRequest createUserRequest) {
-        return new CreateLoginRequest(createUserRequest.email, RandomStringUtils.randomAlphabetic(10));
+        return new CreateLoginRequest(createUserRequest.getName(), RandomStringUtils.randomAlphabetic(10));
     }
 
     public static CreateLoginRequest userCredentialsNewEmail(CreateUserRequest createUserRequest) {
-        return new CreateLoginRequest(RandomStringUtils.randomAlphabetic(10) + EMAIL_POSTFIX, createUserRequest.password, createUserRequest.name);
+        return new CreateLoginRequest(RandomStringUtils.randomAlphabetic(10) + "@yandex.ru", createUserRequest.getPassword(), createUserRequest.getName());
     }
 
     public static CreateLoginRequest userCredentialsNewName(CreateUserRequest createUserRequest) {
-        return new CreateLoginRequest(createUserRequest.email, createUserRequest.password, RandomStringUtils.randomAlphabetic(10));
+        return new CreateLoginRequest(createUserRequest.getEmail(), createUserRequest.getPassword(), RandomStringUtils.randomAlphabetic(10));
     }
+
+
 }

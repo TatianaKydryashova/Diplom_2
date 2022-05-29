@@ -7,8 +7,9 @@ import org.junit.Test;
 import requests.CreateUserRequest;
 
 public class UserRegisterTest {
-    public UserApi userApi;
-    public String token;
+    UserApi userApi;
+    String token;
+    CreateUserRequest createUserRequest;
 
     @Before
     public void setUp() {
@@ -23,7 +24,7 @@ public class UserRegisterTest {
     @Test
     @DisplayName("Check successful user creation")
     public void checkUserCreationPassedTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
+        createUserRequest = CreateUserRequest.generateRandomUser();
         Response response = userApi.createUser(createUserRequest);
         token = userApi.getAccessToken(response);
         userApi.checkStatusCodeCreateUserOk(response);
@@ -34,7 +35,7 @@ public class UserRegisterTest {
     @Test
     @DisplayName("Check existing user creation")
     public void checkExistingUserCreationTest() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomUser();
+        createUserRequest = CreateUserRequest.generateRandomUser();
         Response register = userApi.createUser(createUserRequest);
         token = userApi.getAccessToken(register);
         Response response = userApi.createUser(createUserRequest);
@@ -46,7 +47,7 @@ public class UserRegisterTest {
     @Test
     @DisplayName("Check create user without Email")
     public void checkUserCreationWithoutEmail() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomCustomerWithoutEmail();
+        createUserRequest = CreateUserRequest.generateRandomCustomerWithoutEmail();
         Response response = userApi.createUser(createUserRequest);
         userApi.checkStatusCodeCreateUserWithoutRequiredField(response);
         userApi.checkSuccessValueCreateUserWithoutRequiredField(response);
@@ -56,7 +57,7 @@ public class UserRegisterTest {
     @Test
     @DisplayName("Check create user without Name")
     public void checkUserCreationWithoutName() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomCustomerWithoutName();
+        createUserRequest = CreateUserRequest.generateRandomCustomerWithoutName();
         Response response = userApi.createUser(createUserRequest);
         userApi.checkStatusCodeCreateUserWithoutRequiredField(response);
         userApi.checkSuccessValueCreateUserWithoutRequiredField(response);
@@ -66,7 +67,7 @@ public class UserRegisterTest {
     @Test
     @DisplayName("Check create user without Password")
     public void checkUserCreationWithoutPassword() {
-        CreateUserRequest createUserRequest = CreateUserRequest.generateRandomCustomerWithoutPassword();
+        createUserRequest = CreateUserRequest.generateRandomCustomerWithoutPassword();
         Response response = userApi.createUser(createUserRequest);
         userApi.checkStatusCodeCreateUserWithoutRequiredField(response);
         userApi.checkSuccessValueCreateUserWithoutRequiredField(response);
