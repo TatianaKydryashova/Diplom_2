@@ -7,6 +7,12 @@ import org.junit.Test;
 import requests.CreateLoginRequest;
 import requests.CreateUserRequest;
 
+/*
+По private: обычно переменные классов делают private, но Вы им поменяли модификатор доступа с public на "по умолчанию",
+который отличается от private. Это было сделано умышленно? Если да, то какая была идея?
+ тут нет никакой разницы, private или default, тестовые классы нигде не вызываются, нигде не наследуются,
+  поэтому все равно какой у них будет модификатор доступа конкретно в данной задаче
+ */
 public class UserLoginTest {
 
      UserApi userApi;
